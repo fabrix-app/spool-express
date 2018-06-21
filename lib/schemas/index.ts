@@ -1,0 +1,1 @@
+export { webConfig } from './webConfig'

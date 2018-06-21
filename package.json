@@ -1,0 +1,107 @@
+{
+  "name": "@fabrix/spool-express",
+  "version": "1.0.0-alpha.1",
+  "description": "Spool Express - Binds the routes compiled in spool-router to a Express 4 Server.",
+  "homepage": "https://fabrix.app",
+  "author": "Fabrix-app Team <hello@fabrix.app>",
+  "contributors": [
+    {
+      "name": "Scott Wyatt",
+      "email": "scottwyatt86@gmail.com",
+      "url": "https://github.com/scott-wyatt"
+    },
+    {
+      "name": "Jimmy Aumard",
+      "url": "https://github.com/jaumard"
+    }
+  ],
+  "keywords": [
+    "fabrix",
+    "express",
+    "express4",
+    "express5",
+    "fabrix-app",
+    "expressjs",
+    "webserver",
+    "spool"
+  ],
+  "scripts": {
+    "build": "tsc -p ./lib/tsconfig.release.json",
+    "lint": "tslint -p ./lib",
+    "watch": "tsc -w -p ./lib/tsconfig.release.json",
+    "test": "npm run clean && npm run lint && npm run build && nyc mocha",
+    "prepublishOnly": "npm run compile",
+    "compile": "npm run clean && npm run build",
+    "clean": "rm -rf dist"
+  },
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "pre-commit": [
+    "test"
+  ],
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.2",
+    "consolidate": "^0.15.0",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "express-boom": "^2.0.0",
+    "express-session": "^1.15.6",
+    "joi": "^10.4.1",
+    "lodash": "^4.17.5",
+    "method-override": "^2.3.10",
+    "methods": "^1.1.2"
+  },
+  "devDependencies": {
+    "@fabrix/fabrix": "^1.0.0-alpha.4",
+    "@fabrix/lint": "^1.0.0-alpha.3",
+    "@fabrix/spool-i18n": "^1.0.0-alpha.5",
+    "@fabrix/spool-router": "^1.0.0-alpha.5",
+    "@fabrix/spool-sequelize": "^1.0.0-alpha.1",
+    "@fabrix/spool-tapestries": "^1.0.0-alpha.5",
+    "@types/body-parser": "^1.17.0",
+    "@types/compression": "0.0.36",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/cors": "^2.8.4",
+    "@types/express": "^4.16.0",
+    "@types/express-session": "^1.15.10",
+    "@types/lodash": "^4.14.109",
+    "@types/method-override": "0.0.31",
+    "@types/methods": "^1.1.0",
+    "@types/mkdirp": "^0.5.2",
+    "@types/node": "~10.3.2",
+    "boom": "^7.2.0",
+    "express": "^4.16.3",
+    "npm": "^5.7.1",
+    "mocha": "^5",
+    "nyc": "^12.0.2",
+    "pre-commit": "^1.2.2",
+    "pug": "^2.0.1",
+    "smokesignals": "^3",
+    "sqlite3": "^4.0.0",
+    "supertest": "^3.0.0",
+    "tslib": "~1.9.0",
+    "tslint": "~5.10.0",
+    "tslint-microsoft-contrib": "~5.0.3",
+    "tsutils": "~2.27.1",
+    "typescript": "~2.8.1"
+  },
+  "peerDependencies": {
+    "@fabrix/fabrix": "^1.0.0-alpha.5",
+    "@fabrix/spool-router": "^1.0.0-alpha.5"
+  },
+  "engines": {
+    "node": ">= 7.6.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:fabrix-app/spool-express.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fabrix-app/spool-express/issues"
+  },
+  "license": "MIT"
+}
