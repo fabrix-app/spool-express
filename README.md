@@ -120,8 +120,8 @@ information on how our projects are organized and how to get started.
 [fabrix-url]: http://fabrix.app
 [npm-image]: https://img.shields.io/npm/v/spool-express.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/spool-express
-[ci-image]: https://img.shields.io/travis/fabrix-app/spool-express.svg?style=flat-square&label=Linux%20/%20OSX
-[ci-url]: https://travis-ci.org/fabrix-app/spool-express
+[ci-image]: https://img.shields.io/circleci/project/github/fabrix-app/spool-express/nmaster.svg
+[ci-url]: https://circleci.com/gh/fabrix-app/spool-express/tree/master
 [codeclimate-image]: https://img.shields.io/codeclimate/github/fabrix-app/spool-express.svg?style=flat-square
 [codeclimate-url]: https://codeclimate.com/github/fabrix-app/spool-express
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
