@@ -181,7 +181,6 @@ export const Server = {
   registerRoutes(app: FabrixApp, server: Express) {
     // Sort the routes so that they are always in the correct express order.
     const routes = app.routes = app.routes.sort(Utils.createSpecificityComparator({ order: 'asc' }))
-    console.log('SORTED', routes)
     const express = app.config.get('web.express')
     const expressRouter = express.Router
     const router = expressRouter()
@@ -277,7 +276,6 @@ export const Server = {
         // Filter out undefined
         methods = methods.filter(m => m)
 
-        console.log('methods', methods)
         router[parts[0]].apply(router, methods)
       }
     })

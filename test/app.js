@@ -51,10 +51,10 @@ const App = {
     },
     main: {
       spools: [
-        require('@fabrix/spool-sequelize').SequelizeSpool,
+        require('@fabrix/spool-router').RouterSpool,
         require('@fabrix/spool-i18n').I18nSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,
-        require('@fabrix/spool-router').RouterSpool,
+        require('@fabrix/spool-sequelize').SequelizeSpool,
         require('../dist').ExpressSpool // spool-express
       ]
     },
@@ -265,7 +265,7 @@ const App = {
       path: '/node_modules',
       handler: {
         directory: {
-          path: 'node_modules/@fabrix'
+          path: 'node_modules/@fabrix/fabrix'
         }
       }
     }, {
@@ -284,7 +284,7 @@ const App = {
       init: (fabrixApp, expressApp) => {
         expressApp.initOk = true
       },
-      // cors: true,
+      cors: true,
       port: 3030,
       portHttp: 3000,
       ssl: {

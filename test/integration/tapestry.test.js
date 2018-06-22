@@ -180,7 +180,6 @@ describe('TapestryController', () => {
         .expect(200)
         .end((err, res) => {
           const role = res.body
-
           assert(role)
           assert.equal(role.name, 'associatedroletest1')
           assert.equal(role.userId, userId)
@@ -274,6 +273,7 @@ describe('TapestryController', () => {
         })
         .expect(200)
         .end((err, res) => {
+
           if (err) return done(err)
 
           userId = res.body.id

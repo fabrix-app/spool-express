@@ -200,7 +200,7 @@ export class TapestryController extends Controller {
     const TapestryService = this.app.services.TapestryService as TTapestryService
     const spoolExpress = this.app.spools.express as ExpressSpool
     const options = spoolExpress.getOptionsFromQuery(req.query)
-    const criteria = spoolExpress.express.getCriteriaFromQuery(req.query)
+    const criteria = spoolExpress.getCriteriaFromQuery(req.query)
     const parentModel = req.params.parentModel
     const parentId = req.params.parentId
     const childAttribute = req.params.childAttribute
@@ -235,6 +235,7 @@ export class TapestryController extends Controller {
     const spoolExpress = this.app.spools.express as ExpressSpool
     const options = spoolExpress.getOptionsFromQuery(req.query)
     const criteria = spoolExpress.getCriteriaFromQuery(req.query)
+
     const parentModel = req.params.parentModel
     const parentId = req.params.parentId
     const childAttribute = req.params.childAttribute

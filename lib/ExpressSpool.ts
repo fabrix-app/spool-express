@@ -39,7 +39,7 @@ export class ExpressSpool extends ServerSpool {
 
     if (serverSpools.some(v => spools.indexOf(v) >= 0)) {
       return Promise.reject(
-        new Error('There is another web services spool installed that conflicts with spool-express!')
+        new Error('There is one or more web services spool installed that conflicts with spool-express!')
       )
     }
     if (!this.app.config.get('web.express')) {

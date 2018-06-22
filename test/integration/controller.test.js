@@ -6,7 +6,6 @@ const supertest = require('supertest')
 describe('express controllers', () => {
   let request
   before(() => {
-    console.log('ROUTES', app.routes)
     request = supertest('http://localhost:3000')
   })
   describe('DefaultController', () => {

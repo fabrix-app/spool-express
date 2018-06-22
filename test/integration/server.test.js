@@ -10,7 +10,7 @@ describe('express options', () => {
   })
 
   it('Should execute init method', () => {
-    assert(global.app.packs.express.server.initOk)
+    assert(global.app.spools.express.server.initOk)
   })
 
   describe('Should use CORS', () => {
@@ -39,9 +39,9 @@ describe('express options', () => {
   })
 
   describe('Should serve static file', () => {
-    it('should return file on GET /node_modules/fabrix/index.js', done => {
+    it('should return file on GET /node_modules/@fabrix/fabrix/dist/index.js', done => {
       request
-        .get('/node_modules/index.js')
+        .get('/node_modules/dist/index.js')
         .expect(200)
         .end((err, res) => {
           if (!err) {
