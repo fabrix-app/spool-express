@@ -1,10 +1,11 @@
 # spool-express
-:package: Express spool
+:package: Express Spool
 
 [![Gitter][gitter-image]][gitter-url]
 [![NPM version][npm-image]][npm-url]
-[![Linux + OSX Build Status][ci-image]][ci-url]
-[![Code Climate][codeclimate-image]][codeclimate-url]
+[![Build Status][ci-image]][ci-url]
+[![Test Coverage][coverage-image]][coverage-url]
+[![Dependency Status][daviddm-image]][daviddm-url]
 [![Follow @fabrix-app on Twitter][twitter-image]][twitter-url]
 
 This pack binds the routes compiled in [spool-router](https://github.com/fabrix-app/spool-router)
@@ -12,8 +13,8 @@ to an [Express Server](http://expressjs.com/en/api.html).
 
 ## Install
 
-```
-$ npm install --save spool-express
+```sh
+$ npm install @fabrix/spool-express --save
 ```
 
 ## Compatibility
@@ -40,9 +41,8 @@ Load in your spool config.
 module.exports = {
   // ...
   spools: [
-    require('spool-core'),
-    require('spool-router'),
-    require('spool-express')
+    require('@fabrix/spool-router').RouterSpool,
+    require('@fabrix/spool-express').ExpressSpool
   ]
 }
 ```
@@ -120,7 +120,7 @@ information on how our projects are organized and how to get started.
 [fabrix-url]: http://fabrix.app
 [npm-image]: https://img.shields.io/npm/v/@fabrix/spool-express.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/@fabrix/spool-express
-[ci-image]: https://img.shields.io/circleci/project/github/fabrix-app/spool-express/nmaster.svg
+[ci-image]: https://img.shields.io/circleci/project/github/fabrix-app/spool-express/master.svg
 [ci-url]: https://circleci.com/gh/fabrix-app/spool-express/tree/master
 [codeclimate-image]: https://img.shields.io/codeclimate/github/fabrix-app/spool-express.svg?style=flat-square
 [codeclimate-url]: https://codeclimate.com/github/fabrix-app/spool-express
