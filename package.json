@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-express",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "description": "Spool Express - Binds the routes compiled in spool-router to a Express 4 Server.",
   "homepage": "https://fabrix.app",
   "author": "Fabrix-app Team <hello@fabrix.app>",
@@ -56,7 +56,7 @@
     "methods": "^1.1.2"
   },
   "devDependencies": {
-    "@fabrix/fabrix": "^1.0.0-alpha.7",
+    "@fabrix/fabrix": "^1.0.0-alpha.8",
     "@fabrix/lint": "^1.0.0-alpha.3",
     "@fabrix/spool-i18n": "^1.0.0-alpha.6",
     "@fabrix/spool-router": "^1.0.0-alpha.6",
@@ -90,7 +90,7 @@
     "typescript": "~2.8.1"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.0.0-alpha.7",
+    "@fabrix/fabrix": "^1.0.0-alpha.8",
     "@fabrix/spool-router": "^1.0.0-alpha.6"
   },
   "engines": {

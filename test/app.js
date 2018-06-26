@@ -8,7 +8,7 @@ const Joi = require('joi')
 const App = {
   pkg: {
     name: '@fabrix/express-spool-test',
-    version: '3.0.0'
+    version: '1.0.0'
   },
   api: Api,
   config: {

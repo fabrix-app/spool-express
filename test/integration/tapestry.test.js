@@ -255,7 +255,7 @@ describe('TapestryController', () => {
         .get('/user/' + userId + '/roles/' + roleId)
         .expect(200)
         .end((err, res) => {
-          const role = res.body[0]
+          const role = res.body
           assert(role)
           assert.equal(role.id, roleId)
           assert.equal(role.user.id, userId)

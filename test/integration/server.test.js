@@ -110,7 +110,7 @@ describe('express options', () => {
   })
 
   describe('Should start with HTTPS/SSL on port 3030', () => {
-    it('should return {app: \'3.0.0\'} on GET /default/info', done => {
+    it('should return {app: \'1.0.0\'} on GET /default/info', done => {
       request
         .get('/default/info')
         .expect(200)
@@ -118,7 +118,7 @@ describe('express options', () => {
           if (!err) {
             const data = res.body
             assert.deepEqual(data, {
-              app: '3.0.0'
+              app: '1.0.0'
             })
           }
           done(err)

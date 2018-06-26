@@ -4,6 +4,8 @@ import { FabrixController as Controller } from '@fabrix/fabrix/dist/common/Contr
 import { TapestryService as TTapestryService } from '@fabrix/spool-tapestries/dist/api/services'
 import { ExpressSpool } from '../../ExpressSpool'
 
+import { extend } from 'lodash'
+
 const manageErrors = (app, error) => {
   app.log.error(error)
   if (app.env.NODE_ENV !== 'production') {
@@ -173,12 +175,14 @@ export class TapestryController extends Controller {
     let response
 
     if (childId) {
-      response = TapestryService.findAssociation(parentModel,
-        parentId, childAttribute, childId, options)
+      response = TapestryService.findAssociation(
+        parentModel, parentId, childAttribute, childId, extend({ findOne: true }, options)
+      )
     }
     else {
-      response = TapestryService.findAssociation(parentModel,
-        parentId, childAttribute, criteria, options)
+      response = TapestryService.findAssociation(
+        parentModel, parentId, childAttribute, criteria, options
+      )
     }
 
     response.then(elements => {
@@ -207,12 +211,14 @@ export class TapestryController extends Controller {
     const childId = req.params.childId
     let response
     if (childId) {
-      response = TapestryService.updateAssociation(parentModel,
-        parentId, childAttribute, childId, req.body, options)
+      response = TapestryService.updateAssociation(
+        parentModel, parentId, childAttribute, childId, req.body, extend({ findOne: true }, options)
+      )
     }
     else {
-      response = TapestryService.updateAssociation(parentModel,
-        parentId, childAttribute, criteria, req.body, options)
+      response = TapestryService.updateAssociation(
+        parentModel, parentId, childAttribute, criteria, req.body, options
+      )
     }
 
     response.then(elements => {
