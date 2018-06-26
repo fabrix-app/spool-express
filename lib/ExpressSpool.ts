@@ -34,13 +34,11 @@ export class ExpressSpool extends ServerSpool {
    * server spools are installed (e.g. express)
    */
   async validate () {
-    const serverSpools = ['hapi', 'loa', 'koa2', 'restify']
+    const requiredSpools = ['router']
     const spools = Object.keys(this.app.config.get('main.spools'))
 
-    if (serverSpools.some(v => spools.indexOf(v) >= 0)) {
-      return Promise.reject(
-        new Error('There is one or more web services spool installed that conflicts with spool-express!')
-      )
+    if (requiredSpools.some(v => spools.indexOf(v) >= 0)) {
+      return Promise.reject(new Error(`spool-express requires spools: ${ requiredSpools.join(', ') }!`))
     }
     if (!this.app.config.get('web.express')) {
       return Promise.reject(
