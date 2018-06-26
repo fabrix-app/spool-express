@@ -122,6 +122,8 @@ information on how our projects are organized and how to get started.
 [npm-url]: https://npmjs.org/package/@fabrix/spool-express
 [ci-image]: https://img.shields.io/circleci/project/github/fabrix-app/spool-express/master.svg
 [ci-url]: https://circleci.com/gh/fabrix-app/spool-express/tree/master
+[daviddm-image]: http://img.shields.io/david/fabrix-app/spool-express.svg?style=flat-square
+[daviddm-url]: https://david-dm.org/fabrix-app/spool-express
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
 [gitter-url]: https://gitter.im/fabrix-app/fabrix
 [twitter-image]: https://img.shields.io/twitter/follow/FabrixApp.svg?style=social
