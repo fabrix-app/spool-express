@@ -6,7 +6,7 @@
 [![Build Status][ci-image]][ci-url]
 [![Test Coverage][coverage-image]][coverage-url]
 [![Dependency Status][daviddm-image]][daviddm-url]
-[![Follow @fabrix-app on Twitter][twitter-image]][twitter-url]
+[![Follow @FabrixApp on Twitter][twitter-image]][twitter-url]
 
 This pack binds the routes compiled in [spool-router](https://github.com/fabrix-app/spool-router)
 to an [Express Server](http://expressjs.com/en/api.html). 
@@ -122,9 +122,10 @@ information on how our projects are organized and how to get started.
 [npm-url]: https://npmjs.org/package/@fabrix/spool-express
 [ci-image]: https://img.shields.io/circleci/project/github/fabrix-app/spool-express/master.svg
 [ci-url]: https://circleci.com/gh/fabrix-app/spool-express/tree/master
-[codeclimate-image]: https://img.shields.io/codeclimate/github/fabrix-app/spool-express.svg?style=flat-square
-[codeclimate-url]: https://codeclimate.com/github/fabrix-app/spool-express
 [gitter-image]: http://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square
 [gitter-url]: https://gitter.im/fabrix-app/fabrix
-[twitter-image]: https://img.shields.io/twitter/follow/fabrix-app.svg?style=social
-[twitter-url]: https://twitter.com/fabrix-app
+[twitter-image]: https://img.shields.io/twitter/follow/FabrixApp.svg?style=social
+[twitter-url]: https://twitter.com/FabrixApp
+[coverage-image]: https://img.shields.io/codeclimate/coverage/github/fabrix-app/spool-express.svg?style=flat-square
+[coverage-url]: https://codeclimate.com/github/fabrix-app/spool-express/coverage
+

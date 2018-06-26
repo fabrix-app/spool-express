@@ -56,12 +56,12 @@
     "methods": "^1.1.2"
   },
   "devDependencies": {
-    "@fabrix/fabrix": "^1.0.0-alpha.8",
+    "@fabrix/fabrix": "^1.0.0-alpha.9",
     "@types/lodash": "^4.14.109",
     "@fabrix/lint": "^1.0.0-alpha.3",
     "@fabrix/spool-i18n": "^1.0.0-alpha.6",
     "@fabrix/spool-router": "^1.0.0-alpha.6",
-    "@fabrix/spool-sequelize": "^1.0.0-alpha.7",
+    "@fabrix/spool-sequelize": "^1.0.0-alpha.8",
     "@fabrix/spool-tapestries": "^1.0.0-alpha.7",
     "@types/body-parser": "^1.17.0",
     "@types/compression": "0.0.36",
@@ -90,7 +90,7 @@
     "typescript": "~2.8.1"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.0.0-alpha.8",
+    "@fabrix/fabrix": "^1.0.0-alpha.9",
     "@fabrix/spool-router": "^1.0.0-alpha.6"
   },
   "engines": {
