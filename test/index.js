@@ -7,7 +7,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 before(() => {
   global.app = new FabrixApp(require('./app'))
-  return global.app.start().catch(global.app.stop())
+  return global.app.start().catch(err =>  global.app.stop(err))
 })
 
 // before(done => {

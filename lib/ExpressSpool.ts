@@ -1,5 +1,5 @@
 import { ServerSpool } from '@fabrix/fabrix/dist/common/spools/server'
-import * as _ from 'lodash'
+import { isArray } from 'lodash'
 import { Express } from 'express'
 
 import { Server } from './server'
@@ -34,10 +34,10 @@ export class ExpressSpool extends ServerSpool {
    * server spools are installed (e.g. express)
    */
   async validate () {
-    const requiredSpools = ['router']
-    const spools = Object.keys(this.app.config.get('main.spools'))
+    const requiredSpools = ['router', 'i18n']
+    const spools = Object.keys(this.app.spools)
 
-    if (requiredSpools.some(v => spools.indexOf(v) >= 0)) {
+    if (!spools.some(v => requiredSpools.indexOf(v) >= 0)) {
       return Promise.reject(new Error(`spool-express requires spools: ${ requiredSpools.join(', ') }!`))
     }
     if (!this.app.config.get('web.express')) {
@@ -74,6 +74,7 @@ export class ExpressSpool extends ServerSpool {
       })
       .then(() => {
         this.app.emit('webserver:http:ready', Server.nativeServer)
+        return
       })
   }
 
@@ -81,7 +82,7 @@ export class ExpressSpool extends ServerSpool {
     if (Server.nativeServer === null) {
       return
     }
-    else if (_.isArray(Server.nativeServer)) {
+    else if (isArray(Server.nativeServer)) {
       Server.nativeServer.forEach(server => {
         server.close()
       })

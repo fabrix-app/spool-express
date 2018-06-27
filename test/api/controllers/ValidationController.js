@@ -1,5 +1,6 @@
 'use strict'
 require('@fabrix/fabrix')
+
 /**
    * @module DefaultController
    *
