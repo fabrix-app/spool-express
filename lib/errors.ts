@@ -8,8 +8,6 @@ export class ValidationError extends Error {
   constructor(error) {
 
     super(error)
-
-    console.log('BROKE', error.details)
     // flat all errors for hapi like validation error response
     const flat = error.details.map(details => {
       return {
