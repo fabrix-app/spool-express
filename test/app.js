@@ -13,17 +13,16 @@ const App = {
   api: Api,
   config: {
     stores: {
-      sqlitedev: {
+      sequelize: {
+        migrate: 'drop',
         orm: 'sequelize',
-        database: 'dev',
-        storage: './.tmp/dev.sqlite',
+        database: 'Sequelize',
         host: '127.0.0.1',
-        dialect: 'sqlite',
-        migrate: 'drop'
+        dialect: 'postgres'
       }
     },
     models: {
-      defaultStore: 'sqlitedev',
+      defaultStore: 'sequelize',
       migrate: 'drop'
     },
     tapestries: {

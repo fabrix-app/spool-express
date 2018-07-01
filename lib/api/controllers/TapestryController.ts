@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
 import { FabrixController as Controller } from '@fabrix/fabrix/dist/common/Controller'
-
 import { TapestryService as TTapestryService } from '@fabrix/spool-tapestries/dist/api/services'
 import { ExpressSpool } from '../../ExpressSpool'
 
