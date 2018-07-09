@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = {
+export const session = {
   /**
    * Secret use by express for his session
    */

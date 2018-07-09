@@ -1,5 +1,4 @@
-/* eslint no-process-env: 0 */
-'use strict'
+import * as express from 'express'
 
 /**
  * Server Configuration
@@ -9,8 +8,8 @@
  *
  * @see {@link http://fabrix.app/doc/config/web}
  */
-module.exports = {
-  express: require('express'),
+export const web = {
+  express: express,
 
   /**
    * CORS options
@@ -22,7 +21,7 @@ module.exports = {
   /**
    * Init method, can be used to customize express instance
    */
-  //init: (fabrixApp, expressApp) => {},
+  // init: (fabrixApp, expressApp) => {},
 
   /**
    * Middlewares to load (in order)
@@ -30,7 +29,7 @@ module.exports = {
   middlewares: {
 
     /*
-    //middlewares loading order
+    // middlewares loading order
     order: [
      'addMethods',
      'cookieParser',
@@ -42,7 +41,7 @@ module.exports = {
      'router',
      '404',
      '500'
-    ]*/
+    ] */
 
     /**
      * Middlewares to load for body parsing
@@ -106,7 +105,7 @@ module.exports = {
   ssl: {
     key: fs.readFileSync('path/to/private.key'),
     cert: fs.readFileSync('path/to/certificate.pem')
-    //OR pfx: fs.readFileSync('path/to/server.pfx')
+    // OR pfx: fs.readFileSync('path/to/server.pfx')
   },
    */
   /**
@@ -114,11 +113,11 @@ module.exports = {
    * Create an HTTP server who redirect to HTTPS server
    * Work only if SSL is enabled
    */
-  //redirectToHttps: false,
+  // redirectToHttps: false,
 
   /**
    * Http port to use if you want to enable http and https
    * SSL need to be enabled
    */
-  //portHttp: 80
+  // portHttp: 80
 }
