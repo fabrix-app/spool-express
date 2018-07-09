@@ -1,6 +1,4 @@
-'use strict'
-
-const Controller = require('fabrix/lib/Controller')
+import { FabrixController as Controller } from '@fabrix/fabrix/dist/common'
 
 /**
  * @module DefaultController
@@ -9,7 +7,7 @@ const Controller = require('fabrix/lib/Controller')
  * @see {@link http://fabrix.app/doc/api/controllers}
  * @this fabrixApp
  */
-module.exports = class DefaultController extends Controller {
+export class DefaultController extends Controller {
 
   /**
    * Return some info about this application
