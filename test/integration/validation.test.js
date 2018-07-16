@@ -46,9 +46,18 @@ describe('express route validation', () => {
           })
       })
 
-      it('should return 200 on GET /validation/:test/failParams with params', (done) => {
+      it('should return 200 on GET /validation/:test/successParams with params', (done) => {
         request
           .get('/validation/test/successParams')
+          .set('accept', 'application/json')
+          .expect(200)
+          .end((err, res) => {
+            done(err)
+          })
+      })
+      it('should return 200 on GET /validation/{test}/successHapiParams with params', (done) => {
+        request
+          .get('/validation/test/successHapiParams')
           .set('accept', 'application/json')
           .expect(200)
           .end((err, res) => {

@@ -180,6 +180,16 @@ const App = {
             params: true
           }
         }
+      },
+      {
+        method: ['GET'],
+        path: '/validation/{id}/successHapiParams',
+        handler: 'ValidationController.success',
+        config: {
+          validate: {
+            params: true
+          }
+        }
       }, {
         method: ['GET'],
         path: '/validation/failQuery',

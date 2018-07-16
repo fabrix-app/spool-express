@@ -48,7 +48,6 @@ export class ExpressSpool extends ServerSpool {
         )
       )
     }
-
     return Promise.all([
       Validator.validateWebConfig(this.app.config.get('web'))
     ])
@@ -78,6 +77,9 @@ export class ExpressSpool extends ServerSpool {
       })
   }
 
+  /**
+   * Stops the Server(s)
+   */
   async unload () {
     if (Server.nativeServer === null) {
       return
@@ -91,5 +93,14 @@ export class ExpressSpool extends ServerSpool {
       Server.nativeServer.close()
     }
     return Promise.resolve()
+  }
+
+  /**
+   *
+   */
+  sanity() {
+    if (!Array.isArray(this.app.routes)) {
+      throw new Error('Sanity Failed: app.routes is not an array!')
+    }
   }
 }

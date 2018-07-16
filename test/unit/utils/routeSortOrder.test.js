@@ -1,7 +1,7 @@
 'use strict'
 /* global describe, it */
 const assert = require('assert')
-const routeOrder = require('../../../dist/utils').Utils.createSpecificityComparator
+const routeOrder = require('@fabrix/spool-router').Utils.createSpecificityComparator
 
 describe('Utils Route Sort Order', () => {
   it('should exist', () => {

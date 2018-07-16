@@ -3,7 +3,7 @@ import { Express, Request, Response } from 'express'
 import { Utils } from './utils'
 import { ValidationError } from './errors'
 
-import * as _ from 'lodash'
+import { defaults, isArray, isString, each, isPlainObject } from 'lodash'
 import * as cors from 'cors'
 import { join } from 'path'
 import * as http from 'http'
@@ -15,6 +15,7 @@ import * as expressBoom from 'express-boom'
 
 
 export const Server = {
+  BreakException: {},
   port: null,
   host: null,
   ssl: null,
@@ -24,6 +25,8 @@ export const Server = {
   serverPolicies: {},
   serverHandlers: {},
   webConfig: {},
+  middlewares: {},
+  middlewaresOrder: [],
 
   createServer(app: FabrixApp) {
     const main = app.config.get('main')
@@ -36,6 +39,8 @@ export const Server = {
 
     const server = express()
     this.webConfig = Object.assign({}, app.config.get('web'))
+    this.middlewares = app.config.get('web.middlewares') || {}
+    this.middlewaresOrder = Object.values(app.config.get('web.middlewares.order') || [])
     this.port = this.webConfig.port
     this.portHttp = this.webConfig.portHttp
     this.host = this.webConfig.host
@@ -44,15 +49,11 @@ export const Server = {
     this.cors = this.webConfig.cors
     this.redirectToHttps = this.webConfig.redirectToHttps || false
 
-    if (!this.webConfig.middlewares) {
-      this.webConfig.middlewares = {}
-    }
-
     if (main.paths && main.paths.www) {
       // app.config.set('web.middlewares.www', express.static(main.paths.www, {
       //   maxAge: this.webConfig.cache
       // }))
-      this.webConfig.middlewares.www = express.static(main.paths.www, {
+      this.middlewares.www = express.static(main.paths.www, {
         maxAge: this.webConfig.cache
       })
     }
@@ -61,7 +62,7 @@ export const Server = {
     }
 
     if (sess && sess.secret) {
-      this.webConfig.middlewares.session = session(_.defaults({
+      this.middlewares.session = session(defaults({
         secret: sess.secret,
         store: sess.store,
         resave: true,
@@ -72,17 +73,17 @@ export const Server = {
       app.log.info('config.session.secret: No secret given so session are disabled')
     }
 
-    if (!this.webConfig.middlewares.addMethods) {
-      this.webConfig.middlewares.addMethods = (req: Request, res: Response, next) => {
+    if (!this.middlewares.addMethods) {
+      this.middlewares.addMethods = (req: Request, res: Response, next) => {
         req.log = app.log
         req.fabrixApp = app
         const accept = req.get('accept') || ''
         req.wantsJSON = accept.indexOf('json') !== -1
         res.serverError = err => {
-          this.webConfig.middlewares['500'](err, req, res, next)
+          this.middlewares['500'](err, req, res, next)
         }
         res.notFound = () => {
-          this.webConfig.middlewares['404'](req, res, next)
+          this.middlewares['404'](req, res, next)
         }
         res.forbidden = (msg) => {
           res.serverError({
@@ -110,33 +111,41 @@ export const Server = {
       server.use(cors(this.cors === true ? {} : this.cors))
     }
 
-    for (const index of Object.keys(this.webConfig.middlewares.order || {})) {
-      const middlewareName = this.webConfig.middlewares.order[index]
-      const middleware = this.webConfig.middlewares[middlewareName]
+    // for (const index of Object.keys(this.webConfig.middlewares.order || {})) {
+    this.middlewaresOrder.forEach((middlewareName, index) => {
+      // const middlewareName = this.webConfig.middlewares.order[index]
+      const middleware = this.middlewares[middlewareName]
 
-      if (!middleware && middlewareName !== 'router') {
-        continue
-      }
-
-      if (_.isArray(middleware)) {
-        if (_.isString(middleware[0])) {
-          server.use.apply(server, middleware)
+      try {
+        if (!middleware && middlewareName !== 'router') {
+          // throw Server.BreakException
+          // continue
         }
-        else {
-          for (const i of Object.keys(middleware)) {
-            const m = middleware[i]
-            server.use(m)
+
+        if (isArray(middleware)) {
+          if (isString(middleware[0])) {
+            server.use.apply(server, middleware)
+          }
+          else {
+            for (const i of Object.keys(middleware)) {
+              const m = middleware[i]
+              server.use(m)
+            }
           }
         }
+        else if (middlewareName === 'router') {
+          this.registerRoutes(app, server)
+        }
+        else if (middleware) {
+          server.use(middleware)
+        }
       }
-      else if (middlewareName === 'router') {
-        this.registerRoutes(app, server)
+      catch (e) {
+        if (e !== Server.BreakException) {
+          throw e
+        }
       }
-      else if (middleware) {
-        server.use(middleware)
-      }
-
-    }
+    })
   },
 
   /**
@@ -180,7 +189,7 @@ export const Server = {
    */
   registerRoutes(app: FabrixApp, server: Express) {
     // Sort the routes so that they are always in the correct express order.
-    const routes = app.routes = app.routes.sort(Utils.createSpecificityComparator({ order: 'asc' }))
+    const routes = app.routes
     const express = app.config.get('web.express')
     const expressRouter = express.Router
     const router = expressRouter()
@@ -210,14 +219,14 @@ export const Server = {
       }
     })
 
-    _.each(this.serverRoutes, (route, path) => {
+    each(this.serverRoutes, (route, path) => {
 
       const parts = path.split(' ')
 
       let methods = []
 
       // Handler is object configuration
-      if (_.isPlainObject(route.handler)) {
+      if (isPlainObject(route.handler)) {
         if (route.handler.directory && route.handler.directory.path) {
           router.use(parts[1], express.static(route.handler.directory.path))
         }
@@ -297,10 +306,12 @@ export const Server = {
     init(app, server)
     return new Promise((resolve, reject) => {
       if (this.externalConfig) {
-        this.externalConfig(app, server).then(servers => {
-          this.nativeServer = servers
-          resolve()
-        }).catch(reject)
+        this.externalConfig(app, server)
+          .then(servers => {
+            this.nativeServer = servers
+            resolve()
+          })
+          .catch(reject)
       }
       else if (this.ssl) {
         this._createHttpsServer(this.ssl, server).then(resolve).catch(reject)

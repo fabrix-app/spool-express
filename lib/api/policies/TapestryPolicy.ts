@@ -1,5 +1,3 @@
-'use strict'
-
 import { isPlainObject, isArray, isEmpty } from 'lodash'
 import { FabrixPolicy as Policy } from '@fabrix/fabrix/dist/common/Policy'
 
