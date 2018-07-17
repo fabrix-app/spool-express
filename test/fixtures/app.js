@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const smokesignals = require('smokesignals')
 
-const Api = require('./api')
+const Api = require('./api/index')
 const fs = require('fs')
 const Joi = require('joi')
 
@@ -54,182 +54,128 @@ const App = {
         require('@fabrix/spool-i18n').I18nSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,
         require('@fabrix/spool-sequelize').SequelizeSpool,
-        require('../dist').ExpressSpool // spool-express
+        require('../../dist').ExpressSpool // spool-express
       ]
     },
-    routes: [
-      {
-        method: 'GET',
-        path: '/',
+    routes: {
+      '/': {
+        'GET': 'ViewController.helloWorld',
         config: {
           cors: {
             origin: ['https://fabrix.app']
           }
-        },
-        handler: 'ViewController.helloWorld'
-      }, {
-        method: ['GET'],
-        path: '/default/notFound',
-        handler: 'DefaultController.notFound'
-      }, {
-        method: ['GET'],
-        path: '/default/serverError',
-        handler: 'DefaultController.serverError'
-      }, {
-        method: ['GET'],
-        path: '/standard/info',
-        handler: 'StandardController.info'
-      }, {
-        method: ['GET'],
-        path: '/standard/intercept',
-        handler: 'StandardController.intercept'
-      }, {
-        method: ['POST', 'PUT'],
-        path: '/default/info',
-        handler: 'DefaultController.echo'
-      }, {
-        method: ['GET'],
-        path: '/default/info',
-        handler: 'DefaultController.info'
-      }, {
-        method: ['GET'],
-        path: '/default/policySuccess',
-        handler: 'DefaultController.policySuccess',
+        }
+      },
+      '/default/notFound': {
+        'GET': 'DefaultController.notFound'
+      },
+      '/default/serverError': {
+        'GET': 'DefaultController.serverError'
+      },
+      '/standard/info': {
+        'GET': 'StandardController.info'
+      },
+      '/standard/intercept': {
+        'GET': 'StandardController.intercept'
+      },
+      '/default/info': {
+        'GET': 'DefaultController.info',
+        'POST': 'DefaultController.echo',
+        'PUT': 'DefaultController.echo'
+      },
+      '/default/policySuccess': {
+        'GET': 'DefaultController.policySuccess',
         config: {
           pre: ['Default.success']
         }
-      }, {
-        method: ['GET'],
-        path: '/default/policyFail',
-        handler: 'DefaultController.policyFail',
+      },
+      '/default/policyFail': {
+        'GET': 'DefaultController.policyFail',
         config: {
           pre: ['Default.fail']
         }
-      }, {
-        method: ['GET'],
-        path: '/default/policyIntercept',
-        handler: 'DefaultController.policyIntercept',
+      },
+      '/default/policyIntercept': {
+        'GET': 'DefaultController.policyIntercept',
         config: {
           pre: ['Default.intercept']
         }
-      }, {
-        method: 'GET',
-        path: '/',
-        handler: 'ViewController.helloWorld'
-      }, {
-        method: ['GET'],
-        path: '/standard/info',
-        handler: 'StandardController.info'
-      }, {
-        method: ['GET'],
-        path: '/standard/intercept',
-        handler: 'StandardController.intercept'
-      }, {
-        method: ['POST', 'PUT'],
-        path: '/default/info',
-        handler: 'DefaultController.echo'
-      }, {
-        method: ['GET'],
-        path: '/default/info',
-        handler: 'DefaultController.info'
-      }, {
-        method: ['GET'],
-        path: '/default/policySuccess',
-        handler: 'DefaultController.policySuccess'
-      }, {
-        method: ['GET'],
-        path: '/default/policyFail',
-        handler: 'DefaultController.policyFail'
-      }, {
-        method: ['GET'],
-        path: '/default/policyIntercept',
-        handler: 'DefaultController.policyIntercept'
-      }, {
-        method: ['GET'],
-        path: '/validation/failHeaders',
-        handler: 'ValidationController.fail',
+      },
+      '/validation/failHeaders': {
+        'GET': 'ValidationController.fail',
         config: {
           validate: {
             headers: false
           }
         }
-      }, {
-        method: ['GET'],
-        path: '/validation/successHeaders',
-        handler: 'ValidationController.success',
+      },
+      '/validation/successHeaders': {
+        'GET': 'ValidationController.success',
         config: {
           validate: {
             headers: true
           }
         }
-      }, {
-        method: ['GET'],
-        path: '/validation/:id/failParams',
-        handler: 'ValidationController.fail',
+      },
+      '/validation/:id/failParams': {
+        'GET': 'ValidationController.fail',
         config: {
           validate: {
             params: false
           }
         }
-      }, {
-        method: ['GET'],
-        path: '/validation/:id/successParams',
-        handler: 'ValidationController.success',
+      },
+      '/validation/:id/successParams': {
+        'GET': 'ValidationController.success',
         config: {
           validate: {
             params: true
           }
         }
       },
-      {
-        method: ['GET'],
-        path: '/validation/{id}/successHapiParams',
-        handler: 'ValidationController.success',
+      '/validation/{id}/successHapiParams': {
+        'GET': 'ValidationController.success',
         config: {
           validate: {
             params: true
           }
         }
-      }, {
-        method: ['GET'],
-        path: '/validation/failQuery',
-        handler: 'ValidationController.fail',
+      },
+      '/validation/failQuery': {
+        'GET': 'ValidationController.fail',
         config: {
           validate: {
             query: false
           }
         }
-      }, {
-        method: ['GET'],
-        path: '/validation/successQuery',
-        handler: 'ValidationController.success',
+      },
+      '/validation/successQuery': {
+        'GET': 'ValidationController.success',
         config: {
           validate: {
             query: true
           }
         }
-      }, {
-        method: ['POST'],
-        path: '/validation/failBody',
-        handler: 'ValidationController.fail',
+      },
+      '/validation/failBody': {
+        'POST': 'ValidationController.fail',
         config: {
           validate: {
             payload: false
           }
         }
-      }, {
-        method: ['POST'],
-        path: '/validation/successBody',
-        handler: 'ValidationController.success',
+      },
+      '/validation/successBody': {
+        'POST': 'ValidationController.success',
         config: {
           validate: {
             payload: true
           }
         }
-      }, {
-        method: ['GET', 'POST'],
-        path: '/validation/testOrder/:wrongParam',
-        handler: 'ValidationController.fail',
+      },
+      '/validation/testOrder/:wrongParam': {
+        'GET': 'ValidationController.fail',
+        'POST': 'ValidationController.fail',
         config: {
           validate: {
             headers: Joi.object({
@@ -248,10 +194,10 @@ const App = {
             })
           }
         }
-      }, {
-        method: ['GET', 'POST'],
-        path: '/validation/sendRequestData/:numberParam',
-        handler: 'ValidationController.sendRequestData',
+      },
+      '/validation/sendRequestData/:numberParam': {
+        'GET': 'ValidationController.sendRequestData',
+        'POST': 'ValidationController.sendRequestData',
         config: {
           validate: {
             headers: Joi.object({
@@ -270,18 +216,16 @@ const App = {
             })
           }
         }
-      }, {
-        method: 'GET',
-        path: '/node_modules',
-        handler: {
+      },
+      '/node_modules': {
+        'GET': {
           directory: {
             path: 'node_modules/@fabrix/fabrix'
           }
         }
-      }, {
-        method: 'GET',
-        path: '/default/routeConfig',
-        handler: 'DefaultController.routeConfig',
+      },
+      '/default/routeConfig': {
+        'GET': 'DefaultController.routeConfig',
         config: {
           app: {
             customConfig: true,
@@ -289,7 +233,7 @@ const App = {
           }
         }
       }
-    ],
+    },
     web: {
       express: require('express'),
       init: (fabrixApp, expressApp) => {
@@ -299,14 +243,14 @@ const App = {
       port: 3030,
       portHttp: 3000,
       ssl: {
-        key: fs.readFileSync(process.cwd() + '/test/ssl/server.key'),
-        cert: fs.readFileSync(process.cwd() + '/test/ssl/server.crt')
+        key: fs.readFileSync(process.cwd() + '/test/fixtures/ssl/server.key'),
+        cert: fs.readFileSync(process.cwd() + '/test/fixtures/ssl/server.crt')
       },
       views: {
         engines: {
           html: 'pug'
         },
-        path: 'test/views'
+        path: 'test/fixtures/views'
       }
     },
     log: {
