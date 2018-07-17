@@ -99,8 +99,8 @@ export class ExpressSpool extends ServerSpool {
    *
    */
   sanity() {
-    if (!Array.isArray(this.app.routes)) {
-      throw new Error('Sanity Failed: app.routes is not an array!')
+    if (!(this.app.routes instanceof Object)) {
+      throw new Error('Sanity Failed: app.routes is not an object!')
     }
   }
 }

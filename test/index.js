@@ -6,7 +6,7 @@ const pkg = require('../package')
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 before(() => {
-  global.app = new FabrixApp(require('./app'))
+  global.app = new FabrixApp(require('./fixtures/app'))
   return global.app.start().catch(err =>  global.app.stop(err))
 })
 

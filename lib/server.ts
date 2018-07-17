@@ -1,7 +1,9 @@
 import { FabrixApp } from '@fabrix/fabrix'
 import { Express, Request, Response } from 'express'
+import { Utils as RouterUtils } from '@fabrix/spool-router'
 import { Utils } from './utils'
 import { ValidationError } from './errors'
+
 
 import { defaults, isArray, isString, each, isPlainObject } from 'lodash'
 import * as cors from 'cors'
@@ -204,23 +206,24 @@ export const Server = {
       })
     }
 
-    routes.forEach(route => {
-      if (route.method === '*') {
-        route.method = 'ALL'
-      }
-
-      if (route.method instanceof Array) {
-        route.method.forEach(method => {
-          this.serverRoutes[method.toLowerCase() + ' ' + route.path] = route
-        })
-      }
-      else {
-        this.serverRoutes[route.method.toLowerCase() + ' ' + route.path] = route
-      }
+    Object.keys(routes).forEach(r => {
+      // if (route.method === '*') {
+      //   route.method = 'ALL'
+      // }
+      const route = routes[r]
+      RouterUtils.methods.forEach(m => {
+        if (route[m]) {
+          this.serverRoutes[m.toLowerCase() + ' ' + r] = {
+            ...route,
+            path: r,
+            handler: route[m]
+          }
+        }
+      })
     })
 
     each(this.serverRoutes, (route, path) => {
-
+      console.log('BROKE', path, route)
       const parts = path.split(' ')
 
       let methods = []
@@ -231,7 +234,7 @@ export const Server = {
           router.use(parts[1], express.static(route.handler.directory.path))
         }
         else {
-          app.log.warn(`${route.path} will be ignored because it doesn't have a correct handler configuration`)
+          app.log.warn(`${path} will be ignored because it doesn't have a correct handler configuration`)
         }
       }
       else {
