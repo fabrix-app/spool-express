@@ -219,8 +219,10 @@ const App = {
       },
       '/node_modules': {
         'GET': {
-          directory: {
-            path: 'node_modules/@fabrix/fabrix'
+          handler: {
+            directory: {
+              path: 'node_modules/@fabrix/fabrix'
+            }
           }
         }
       },
