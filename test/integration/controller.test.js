@@ -2,6 +2,7 @@
 
 const assert = require('assert')
 const supertest = require('supertest')
+const _ = require('lodash')
 
 describe('express controllers', () => {
   let request
@@ -48,6 +49,37 @@ describe('express controllers', () => {
             done(err)
           })
       })
+    })
+    it('should get pagination', (done) => {
+      request
+        .get('/paginate')
+        .expect(200)
+        .end((err, res) => {
+          assert.ok(res.headers['x-pagination-total'])
+          assert.ok(res.headers['x-pagination-pages'])
+          assert.ok(res.headers['x-pagination-page'])
+          assert.ok(res.headers['x-pagination-limit'])
+          assert.ok(res.headers['x-pagination-offset'])
+
+          assert.equal(_.isNumber(parseInt(res.headers['x-pagination-total'])), true)
+          assert.equal(_.isNumber(parseInt(res.headers['x-pagination-offset'])), true)
+          assert.equal(_.isNumber(parseInt(res.headers['x-pagination-limit'])), true)
+          assert.equal(_.isNumber(parseInt(res.headers['x-pagination-page'])), true)
+          assert.equal(_.isNumber(parseInt(res.headers['x-pagination-pages'])), true)
+          assert.ok(res.body)
+          done(err)
+        })
+    })
+    it('should do jsonCriteria', (done) => {
+      request
+        .get('/jsonCriteria')
+        .query({ where: {hello: 'world'}})
+        .expect(200)
+        .end((err, res) => {
+          assert.ok(res.body)
+          assert.deepEqual(res.body, { hello: 'world' })
+          done(err)
+        })
     })
   })
   describe('ViewController', () => {

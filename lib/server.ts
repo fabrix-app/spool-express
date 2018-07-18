@@ -81,12 +81,31 @@ export const Server = {
         req.fabrixApp = app
         const accept = req.get('accept') || ''
         req.wantsJSON = accept.indexOf('json') !== -1
+
+        req.jsonCriteria = (str) => {
+          if (!str) {
+            return {}
+          }
+          if (str instanceof Object) {
+            return str
+          }
+          try {
+            str = JSON.parse(str)
+          }
+          catch (err) {
+            str = {}
+          }
+          return str
+        }
+
         res.serverError = err => {
           this.middlewares['500'](err, req, res, next)
         }
+
         res.notFound = () => {
           this.middlewares['404'](req, res, next)
         }
+
         res.forbidden = (msg) => {
           res.serverError({
             statusCode: 403,
@@ -95,11 +114,45 @@ export const Server = {
           })
         }
 
+        res.paginate = (count, limit = 0, offset = 0, sort = []) => {
+          limit = Number(limit)
+          offset = Number(offset)
+
+          const pages = Math.ceil(count / limit) === 0 ? 1 : Math.ceil(count / limit)
+          const page = Math.round(((offset + limit) / limit))
+
+          res.set('X-Pagination-Total', count)
+          res.set('X-Pagination-Pages', pages.toString())
+          res.set('X-Pagination-Page', page.toString())
+          res.set('X-Pagination-Offset', offset.toString())
+          res.set('X-Pagination-Limit', limit.toString())
+          res.set('X-Pagination-Sort', Server.sortToString(sort))
+          return res
+        }
+
         next()
       }
     }
 
     return server
+  },
+  sortToString(sort = []) {
+    if (typeof sort === 'string') {
+      return sort
+    }
+    let res = sort.reduce((r, a) => {
+      if (!Array.isArray(a)) {
+        return a
+      }
+      const s = a.reduce((_res, v) => {
+        const val = Array.isArray(v) ? `[${v.join(',')}]` : v
+        _res.push(val)
+        return _res
+      }, [])
+      return `[${r + s.join(',')}]`
+    }, '')
+    res = `[${ res }]`
+    return res
   },
   /**
    * Register middlewares
@@ -217,8 +270,6 @@ export const Server = {
         }
       })
     })
-
-    console.log('broke', this.serverRoutes)
 
     each(this.serverRoutes, (route, path) => {
       const parts = path.split(' ')

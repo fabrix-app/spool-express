@@ -10,11 +10,13 @@ declare namespace Express {
     serverError: any
     notFound: any
     forbidden: any
+    paginate: any
   }
   export interface Request {
     wantsJSON: any
     error: any
     log: any
     fabrixApp: any
+    jsonCriteria: any
   }
 }

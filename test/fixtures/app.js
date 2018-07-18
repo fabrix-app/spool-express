@@ -234,6 +234,12 @@ const App = {
             results: 'ok'
           }
         }
+      },
+      '/paginate': {
+        'GET': 'DefaultController.paginate'
+      },
+      '/jsonCriteria': {
+        'GET': 'DefaultController.jsonCriteria'
       }
     },
     web: {
