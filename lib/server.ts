@@ -207,23 +207,20 @@ export const Server = {
     }
 
     Object.keys(routes).forEach(r => {
-      // if (route.method === '*') {
-      //   route.method = 'ALL'
-      // }
       const route = routes[r]
       RouterUtils.methods.forEach(m => {
         if (route[m]) {
           this.serverRoutes[m.toLowerCase() + ' ' + r] = {
-            ...route,
-            path: r,
-            handler: route[m]
+            ...route[m],
+            path: r
           }
         }
       })
     })
 
+    console.log('broke', this.serverRoutes)
+
     each(this.serverRoutes, (route, path) => {
-      console.log('BROKE', path, route)
       const parts = path.split(' ')
 
       let methods = []
