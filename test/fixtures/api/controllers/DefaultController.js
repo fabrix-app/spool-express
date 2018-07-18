@@ -32,4 +32,11 @@ module.exports = class DefaultController extends Controller {
   routeConfig(req, res) {
     res.status(200).json(req.route.config)
   }
+  paginate(req, res) {
+    res.paginate(10, 10, 10, []).json({})
+  }
+  jsonCriteria(req, res) {
+    const where = req.jsonCriteria(req.query.where)
+    res.json(where)
+  }
 }
