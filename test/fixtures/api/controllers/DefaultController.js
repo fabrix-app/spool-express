@@ -39,4 +39,12 @@ module.exports = class DefaultController extends Controller {
     const where = req.jsonCriteria(req.query.where)
     res.json(where)
   }
+  worldController(req, res) {
+    const where = req.jsonCriteria(req.query.where)
+    res.json({world: where})
+  }
+  planetController(req, res) {
+    const where = req.jsonCriteria(req.query.where)
+    res.json({[req.params.planet]: where})
+  }
 }

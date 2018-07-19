@@ -240,6 +240,16 @@ const App = {
       },
       '/jsonCriteria': {
         'GET': 'DefaultController.jsonCriteria'
+      },
+      // Routes that potentially could get out of order from the router.
+      '/test/earth': {
+        'GET': 'DefaultController.worldController'
+      },
+      '/test/:planet': {
+        'GET': 'DefaultController.planetController'
+      },
+      '/test/world': {
+        'GET': 'DefaultController.worldController'
       }
     },
     web: {

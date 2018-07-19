@@ -259,8 +259,8 @@ export const Server = {
       })
     }
 
-    Object.keys(routes).forEach(r => {
-      const route = routes[r]
+    routes.forEach((route, r) => {
+
       RouterUtils.methods.forEach(m => {
         if (route[m]) {
           this.serverRoutes[m.toLowerCase() + ' ' + r] = {

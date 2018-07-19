@@ -81,6 +81,41 @@ describe('express controllers', () => {
           done(err)
         })
     })
+
+    it('should test order', (done) => {
+      request
+        .get('/test/world')
+        .query({ where: {hello: 'world'}})
+        .expect(200)
+        .end((err, res) => {
+          assert.ok(res.body)
+          assert.deepEqual(res.body, { world: { hello: 'world' } })
+          done(err)
+        })
+    })
+    // TODO fix spool-router and come back to this
+    it.skip('should test order', (done) => {
+      request
+        .get('/test/earth')
+        .query({ where: {hello: 'world'}})
+        .expect(200)
+        .end((err, res) => {
+          assert.ok(res.body)
+          assert.deepEqual(res.body, { world: { hello: 'world' } })
+          done(err)
+        })
+    })
+    it('should test order', (done) => {
+      request
+        .get('/test/mars')
+        .query({ where: {hello: 'mars'}})
+        .expect(200)
+        .end((err, res) => {
+          assert.ok(res.body)
+          assert.deepEqual(res.body, {mars: { hello: 'mars' } })
+          done(err)
+        })
+    })
   })
   describe('ViewController', () => {
     describe('helloWorld', () => {
