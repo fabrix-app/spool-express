@@ -244,7 +244,8 @@ export const Server = {
    */
   registerRoutes(app: FabrixApp, server: Express) {
     // Sort the routes so that they are always in the correct express order.
-    const routes = app.routes
+    // Could be related to https://github.com/fabrix-app/spool-router/issues/6
+    const routes = new Map([...app.routes].reverse())
     const express = app.config.get('web.express')
     const expressRouter = express.Router
     const router = expressRouter()

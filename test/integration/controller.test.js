@@ -94,7 +94,7 @@ describe('express controllers', () => {
         })
     })
     // TODO fix spool-router and come back to this
-    it.skip('should test order', (done) => {
+    it('should test order', (done) => {
       request
         .get('/test/earth')
         .query({ where: {hello: 'world'}})
