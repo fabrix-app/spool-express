@@ -145,11 +145,11 @@ export const Server = {
         return a
       }
       const s = a.reduce((_res, v) => {
-        const val = Array.isArray(v) ? `[${v.join(',')}]` : v
+        const val = Array.isArray(v) ? `["${v.join('","')}"]` : v
         _res.push(val)
         return _res
       }, [])
-      return `[${r + s.join(',')}]`
+      return `["${r + s.join('","')}"]`
     }, '')
     res = `[${ res }]`
     return res
