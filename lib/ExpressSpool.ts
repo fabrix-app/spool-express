@@ -48,9 +48,13 @@ export class ExpressSpool extends ServerSpool {
         )
       )
     }
+
     return Promise.all([
       Validator.validateWebConfig(this.app.config.get('web'))
     ])
+      .catch(err => {
+        return Promise.reject(err)
+      })
   }
 
   configure () {
@@ -74,6 +78,9 @@ export class ExpressSpool extends ServerSpool {
       .then(() => {
         this.app.emit('webserver:http:ready', Server.nativeServer)
         return
+      })
+      .catch(err => {
+        return Promise.reject(err)
       })
   }
 
