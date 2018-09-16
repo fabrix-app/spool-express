@@ -256,6 +256,7 @@ const App = {
       express: require('express'),
       init: (fabrixApp, expressApp) => {
         expressApp.initOk = true
+        return
       },
       cors: true,
       port: 3030,

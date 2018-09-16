@@ -21,7 +21,8 @@ export const web = {
   /**
    * Init method, can be used to customize express instance
    */
-  init: (fabrixApp: FabrixApp, expressApp: Express) => {
+  init: (app: FabrixApp, expressApp: Express) => {
+    return true
   },
 
   /**

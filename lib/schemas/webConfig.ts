@@ -25,4 +25,4 @@ export const webConfig = joi.object().keys({
     path: joi.string().required()
   }),
   server: joi.string()
-})
+}).unknown()
