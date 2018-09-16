@@ -49,7 +49,6 @@ export class ExpressSpool extends ServerSpool {
       )
     }
 
-    console.log('BROEK', this.app.config.get('web'))
     return Promise.all([
       Validator.validateWebConfig(this.app.config.get('web'))
     ])
