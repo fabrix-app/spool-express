@@ -38,6 +38,7 @@ export const web = {
      'compression',
      'methodOverride',
      'www',
+     'helmet',
      'router',
      '404',
      '500'

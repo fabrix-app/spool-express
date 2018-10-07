@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-express",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "description": "Spool Express - Binds the routes compiled in spool-router to a Express 4 Server.",
   "homepage": "https://fabrix.app",
   "author": {
@@ -41,7 +41,8 @@
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "archetype"
   ],
   "pre-commit": [
     "test"
@@ -54,16 +55,17 @@
     "cors": "^2.8.4",
     "express-boom": "^2.0.0",
     "express-session": "^1.15.6",
-    "joi": "^13.6.0",
+    "helmet": "^3.13.0",
+    "joi": "^13.7.0",
     "lodash": "^4.17.11",
     "method-override": "^3.0.0",
     "methods": "^1.1.2"
   },
   "devDependencies": {
-    "@fabrix/fabrix": "^1.5.3",
+    "@fabrix/fabrix": "^1.5.9",
     "@fabrix/lint": "^1.0.0-alpha.3",
-    "@fabrix/spool-i18n": "^1.5.0",
-    "@fabrix/spool-router": "^1.5.0",
+    "@fabrix/spool-i18n": "^1.5.1",
+    "@fabrix/spool-router": "^1.5.1",
     "@fabrix/spool-sequelize": "^1.5.0",
     "@fabrix/spool-tapestries": "^1.5.0",
     "@types/body-parser": "^1.17.0",
@@ -95,9 +97,9 @@
     "typescript": "~2.8.1"
   },
   "peerDependencies": {
-    "@fabrix/fabrix": "^1.5.3",
-    "@fabrix/spool-router": "^1.5.0",
-    "@fabrix/spool-i18n": "^1.5.0"
+    "@fabrix/fabrix": "^1.5.9",
+    "@fabrix/spool-router": "^1.5.1",
+    "@fabrix/spool-i18n": "^1.5.1"
   },
   "engines": {
     "node": ">= 7.6.0"

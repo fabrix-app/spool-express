@@ -1,6 +1,7 @@
 import { ServerSpool } from '@fabrix/fabrix/dist/common/spools/server'
 import { isArray } from 'lodash'
 import { Express } from 'express'
+import * as helmet from 'helmet'
 
 import { Server } from './server'
 import { Validator } from './validator'
@@ -50,6 +51,7 @@ export class ExpressSpool extends ServerSpool {
     }
 
     return Promise.all([
+      Validator.validateExpress(this.app.config.get('express')),
       Validator.validateWebConfig(this.app.config.get('web'))
     ])
       .catch(err => {
@@ -58,7 +60,12 @@ export class ExpressSpool extends ServerSpool {
   }
 
   configure () {
+    // Set a config that let's other spools know this is using express as a webserver
     this.app.config.set('web.server', 'express')
+    // Set helmet for express if it is not explicitly disabled
+    if (this.app.config.get('express.helmet') === false) {
+      this.app.config.set('web.middlewares.helmet', helmet(this.app.config.get('express.helmet')))
+    }
   }
 
   /**
