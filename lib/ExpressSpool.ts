@@ -63,7 +63,7 @@ export class ExpressSpool extends ServerSpool {
     // Set a config that let's other spools know this is using express as a webserver
     this.app.config.set('web.server', 'express')
     // Set helmet for express if it is not explicitly disabled
-    if (!this.app.config.get('express.helmet.disabled')) {
+    if (this.app.config.get('express.helmet') === false) {
       this.app.config.set('web.middlewares.helmet', helmet(this.app.config.get('express.helmet')))
     }
   }
