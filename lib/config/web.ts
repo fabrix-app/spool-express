@@ -37,7 +37,11 @@ export const web = {
       const accept = req.get('accept') || ''
 
       // respond with html page
-      if (accept.indexOf('html') !== -1 && req.app.get('view engine') && !req.wantsJSON) {
+      if (
+        accept.indexOf('html') !== -1
+        && req.app.get('view engine')
+        && !req.wantsJSON
+      ) {
         res.render('404', {
           url: req.url,
           error: req.error
@@ -142,6 +146,7 @@ export const web = {
       'compression',
       'methodOverride',
       'www',
+      'helmet',
       'router',
       '404',
       '500'
