@@ -22,7 +22,8 @@ export const Server = {
   host: null,
   ssl: null,
   redirectToHttps: false,
-  nativeServer: null,
+  // nativeServer: null,
+  nativeServers: new Map(), // : Map<string, http>,
   serverRoutes: {},
   serverPolicies: {},
   serverHandlers: {},
@@ -136,6 +137,7 @@ export const Server = {
 
     return server
   },
+
   sortToString(sort = []) {
     if (typeof sort === 'string') {
       return sort
@@ -350,56 +352,70 @@ export const Server = {
    */
   start(app, server) {
     const init = app.config.get('web.init')
+
     if (!init) {
-      const err = new Error('Init is not define and express can not start')
+      const err = new Error('web.init is not defined and express can not start')
+      return Promise.reject(err)
+    }
+    if (typeof init !== 'function') {
+      const err = new Error('web.init is not a function and express can not start')
       return Promise.reject(err)
     }
 
     init(app, server)
+
+    const promises = Array.from(this.nativeServers.values()).map(s => {
+      console.log('BRK', s)
+      return Server.listenPromise(s)
+    })
+
+    return Promise.all(promises)
+  },
+
+  createNativeServers(app, server) {
     return new Promise((resolve, reject) => {
       if (this.externalConfig) {
-        this.externalConfig(app, server)
+        return this.externalConfig(app, server)
           .then(servers => {
-            this.nativeServer = servers
+            this.nativeServers = new Map(servers)
             resolve()
           })
           .catch(reject)
       }
       else if (this.ssl) {
-        this._createHttpsServer(this.ssl, server).then(resolve).catch(reject)
+        this.nativeServers.set('https', {
+          server: https.createServer(this.ssl, server),
+          host: this.host,
+          port: this.port,
+        })
+        if (this.redirectToHttps || this.portHttp) {
+          this.nativeServers.set('http', {
+            server: http.createServer(server),
+            host: this.host,
+            port: this.portHttp,
+          })
+        }
+        return resolve()
       }
       else {
-        this.nativeServer = http.createServer(server).listen(this.port, this.host, (err) => {
-          if (err) {
-            return reject(err)
-          }
-          resolve()
+        this.nativeServers.set('http', {
+          server: http.createServer(server),
+          host: this.host,
+          port: this.portHttp,
         })
+        return resolve()
       }
     })
   },
 
-  _createHttpsServer(sslConfig, app) {
+  listenPromise(server) {
     return new Promise((resolve, reject) => {
-      this.nativeServer = https.createServer(sslConfig, app)
-        .listen(this.port, this.host, (err) => {
-          if (err) {
-            return reject(err)
-          }
-          if (this.redirectToHttps || this.portHttp) {
-            const httpServer = http.createServer(app)
-              .listen(this.portHttp, this.host, (err2) => {
-                if (err2) {
-                  return reject(err2)
-                }
-                this.nativeServer = [this.nativeServer, httpServer]
-                resolve()
-              })
-          }
-          else {
-            resolve()
-          }
-        })
+      server.server.listen(server.port, server.host, function (err) {
+        if (err) {
+          reject(err)
+        }
+        resolve()
+      })
     })
   }
 }

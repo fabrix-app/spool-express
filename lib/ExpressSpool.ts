@@ -80,10 +80,20 @@ export class ExpressSpool extends ServerSpool {
       Server.registerViews(this.app, this.server)
     ])
       .then(() => {
+        return Server.createNativeServers(this.app, this.server)
+      })
+      .then(() => {
+        this.app.emit(
+          'webserver:http',
+          Array.from(Server.nativeServers.values()).map(s => s.server)
+        )
         return Server.start(this.app, this.server)
       })
       .then(() => {
-        this.app.emit('webserver:http:ready', Server.nativeServer)
+        this.app.emit(
+          'webserver:http:ready',
+          Array.from(Server.nativeServers.values()).map(s => s.server)
+        )
         return
       })
       .catch(err => {
@@ -95,17 +105,15 @@ export class ExpressSpool extends ServerSpool {
    * Stops the Server(s)
    */
   async unload () {
-    if (Server.nativeServer === null) {
+    if (Server.nativeServers.size === 0) {
       return
     }
-    else if (isArray(Server.nativeServer)) {
-      Server.nativeServer.forEach(server => {
-        server.close()
+    else {
+      Array.from(Server.nativeServers.values()).forEach(s => {
+        s.server.close()
       })
     }
-    else {
-      Server.nativeServer.close()
-    }
+
     return Promise.resolve()
   }
 
