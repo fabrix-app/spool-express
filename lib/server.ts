@@ -16,14 +16,19 @@ import * as consolidate from 'consolidate'
 import * as expressBoom from 'express-boom'
 
 
-export const Server = {
+export interface Server {
+  [key: string]: any
+  nativeServers: Map<string, {host: string, port: number, server: any}>
+}
+
+export const Server: Server = {
   BreakException: {},
   port: null,
+  portHttp: null,
   host: null,
   ssl: null,
   redirectToHttps: false,
-  // nativeServer: null,
-  nativeServers: new Map(), // : Map<string, http>,
+  nativeServers: new Map(),
   serverRoutes: {},
   serverPolicies: {},
   serverHandlers: {},
@@ -31,7 +36,7 @@ export const Server = {
   middlewares: {},
   middlewaresOrder: [],
 
-  createServer(app: FabrixApp) {
+  createExpressServer(app: FabrixApp) {
     const main = app.config.get('main')
     const sess = app.config.get('session')
     const express = app.config.get('web.express')
@@ -80,6 +85,7 @@ export const Server = {
       this.middlewares.addMethods = (req: Request, res: Response, next) => {
         req.log = app.log
         req.fabrixApp = app
+
         const accept = req.get('accept') || ''
         req.wantsJSON = accept.indexOf('json') !== -1
 
@@ -99,36 +105,48 @@ export const Server = {
           return str
         }
 
-        res.serverError = err => {
-          this.middlewares['500'](err, req, res, next)
+        // Helper 500
+        if (!res.serverError) {
+          res.serverError = err => {
+            this.middlewares['500'](err, req, res, next)
+          }
         }
 
-        res.notFound = () => {
-          this.middlewares['404'](req, res, next)
+        // Helper 404
+        if (!res.notFound) {
+          res.notFound = () => {
+            this.middlewares['404'](req, res, next)
+          }
         }
 
-        res.forbidden = (msg) => {
-          res.serverError({
-            statusCode: 403,
-            code: 'E_FORBIDDEN',
-            message: msg || 'forbidden'
-          })
+        // Helper 403
+        if (!res.forbidden) {
+          res.forbidden = (msg) => {
+            res.serverError({
+              statusCode: 403,
+              code: 'E_FORBIDDEN',
+              message: msg || 'forbidden'
+            })
+          }
         }
 
-        res.paginate = (count, limit = 0, offset = 0, sort = []) => {
-          limit = Number(limit)
-          offset = Number(offset)
+        // Helper Paginate Utility
+        if (!res.paginate) {
+          res.paginate = (count, limit = 0, offset = 0, sort = []) => {
+            limit = Number(limit)
+            offset = Number(offset)
 
-          const pages = Math.ceil(count / limit) === 0 ? 1 : Math.ceil(count / limit)
-          const page = Math.round(((offset + limit) / limit))
+            const pages = Math.ceil(count / limit) === 0 ? 1 : Math.ceil(count / limit)
+            const page = Math.round(((offset + limit) / limit))
 
-          res.set('X-Pagination-Total', count)
-          res.set('X-Pagination-Pages', pages.toString())
-          res.set('X-Pagination-Page', page.toString())
-          res.set('X-Pagination-Offset', offset.toString())
-          res.set('X-Pagination-Limit', limit.toString())
-          res.set('X-Pagination-Sort', Server.sortToString(sort))
-          return res
+            res.set('X-Pagination-Total', count)
+            res.set('X-Pagination-Pages', pages.toString())
+            res.set('X-Pagination-Page', page.toString())
+            res.set('X-Pagination-Offset', offset.toString())
+            res.set('X-Pagination-Limit', limit.toString())
+            res.set('X-Pagination-Sort', Server.sortToString(sort))
+            return res
+          }
         }
 
         next()
@@ -138,6 +156,10 @@ export const Server = {
     return server
   },
 
+  /**
+   * This shouldn't be here!
+   * @param sort
+   */
   sortToString(sort = []) {
     if (typeof sort === 'string') {
       return sort
@@ -364,10 +386,10 @@ export const Server = {
 
     init(app, server)
 
-    const promises = Array.from(this.nativeServers.values()).map(s => {
-      console.log('BRK', s)
-      return Server.listenPromise(s)
-    })
+    const promises = Array.from(this.nativeServers.values())
+      .map((s) => {
+        return Server.listenPromise(s)
+      })
 
     return Promise.all(promises)
   },
@@ -392,7 +414,7 @@ export const Server = {
           this.nativeServers.set('http', {
             server: http.createServer(server),
             host: this.host,
-            port: this.portHttp,
+            port: this.portHttp || this.port,
           })
         }
         return resolve()
@@ -408,9 +430,9 @@ export const Server = {
     })
   },
 
-  listenPromise(server) {
+  listenPromise(config: {host: string, port: number, server: any}) {
     return new Promise((resolve, reject) => {
-      server.server.listen(server.port, server.host, function (err) {
+      config.server.listen(config.port, config.host, function (err) {
         if (err) {
           reject(err)
         }

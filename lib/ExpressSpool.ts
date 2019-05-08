@@ -73,7 +73,7 @@ export class ExpressSpool extends ServerSpool {
    */
   async initialize () {
 
-    this.server = Server.createServer(this.app)
+    this.server = Server.createExpressServer(this.app)
 
     return Promise.all([
       Server.registerMiddlewares(this.app, this.server),
