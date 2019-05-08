@@ -23,7 +23,7 @@ export interface Server {
 
 export const Server: Server = {
   BreakException: {},
-  port: null,
+  port: null, // process.env.PORT,
   portHttp: null,
   host: null,
   ssl: null,
@@ -46,6 +46,7 @@ export const Server: Server = {
     }
 
     const server = express()
+
     this.webConfig = Object.assign({}, app.config.get('web'))
     this.middlewares = app.config.get('web.middlewares') || {}
     this.middlewaresOrder = Object.values(app.config.get('web.middlewares.order') || [])
@@ -365,6 +366,7 @@ export const Server: Server = {
       }
     })
     server.use(router)
+    return router
   },
 
   /**
@@ -388,7 +390,7 @@ export const Server: Server = {
 
     const promises = Array.from(this.nativeServers.values())
       .map((s) => {
-        return Server.listenPromise(s)
+        return Server.listenPromise(app, s)
       })
 
     return Promise.all(promises)
@@ -423,19 +425,20 @@ export const Server: Server = {
         this.nativeServers.set('http', {
           server: http.createServer(server),
           host: this.host,
-          port: this.portHttp,
+          port: this.portHttp || this.port,
         })
         return resolve()
       }
     })
   },
 
-  listenPromise(config: {host: string, port: number, server: any}) {
+  listenPromise(app: FabrixApp, config: {host: string, port: number, server: any}) {
     return new Promise((resolve, reject) => {
       config.server.listen(config.port, config.host, function (err) {
         if (err) {
           reject(err)
         }
+        app.log.info(`express: ${config.host} listening on ${config.port}`)
         resolve()
       })
     })

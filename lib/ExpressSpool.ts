@@ -63,7 +63,7 @@ export class ExpressSpool extends ServerSpool {
     // Set a config that let's other spools know this is using express as a webserver
     this.app.config.set('web.server', 'express')
     // Set helmet for express if it is not explicitly disabled
-    if (this.app.config.get('express.helmet') === false) {
+    if (this.app.config.get('express.helmet') !== false) {
       this.app.config.set('web.middlewares.helmet', helmet(this.app.config.get('express.helmet')))
     }
   }
@@ -123,6 +123,12 @@ export class ExpressSpool extends ServerSpool {
   sanity() {
     if (!(this.app.routes instanceof Object)) {
       throw new Error('Sanity Failed: app.routes is not an object!')
+    }
+    if (
+      this.app.config.get('express.helmet') !== false
+      && !this.app.config.get('web.middlewares.helmet')
+    ) {
+      throw new Error('Sanity Failed: Helmet was not set on web.middlware when configured at express.helmet')
     }
   }
 }
