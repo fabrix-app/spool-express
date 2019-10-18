@@ -21,6 +21,9 @@ const App = {
         dialect: 'postgres'
       }
     },
+    express: {
+      cluster: true
+    },
     models: {
       defaultStore: 'sequelize',
       migrate: 'drop'
@@ -50,6 +53,7 @@ const App = {
     },
     main: {
       spools: [
+        require('@fabrix/spool-errors').ErrorsSpool,
         require('@fabrix/spool-router').RouterSpool,
         require('@fabrix/spool-i18n').I18nSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,

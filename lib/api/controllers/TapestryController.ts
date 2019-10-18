@@ -2,8 +2,17 @@ import { Request, Response } from 'express'
 import { FabrixController as Controller } from '@fabrix/fabrix/dist/common/Controller'
 import { TapestryService as TTapestryService } from '@fabrix/spool-tapestries/dist/api/services'
 import { ExpressSpool } from '../../ExpressSpool'
-
 import { extend } from 'lodash'
+import { FabrixApp } from '@fabrix/fabrix'
+
+
+interface ExpressRequest extends Request {
+  fabrixApp: FabrixApp
+}
+
+interface ExpressResponse extends Response {
+  fabrixApp: FabrixApp
+}
 
 const manageErrors = (app, error) => {
   app.log.error(error)
@@ -24,7 +33,7 @@ const manageErrors = (app, error) => {
  * @see {@link http://expressjs.com/en/4x/api.html#req}
  */
 export class TapestryController extends Controller {
-  create(req: Request, res: Response) {
+  create(req: ExpressRequest, res: Response) {
     const TapestryService = this.app.services.TapestryService as TTapestryService
     const spoolExpress = this.app.spools.express as ExpressSpool
     const options = spoolExpress.getOptionsFromQuery(req.query)
@@ -40,7 +49,7 @@ export class TapestryController extends Controller {
           res.status(404).json(error)
         }
         else {
-          res.status(500).send(res.boom.wrap(manageErrors(this.app, error), 500))
+          res.status(500).send(res.boom.boomify(manageErrors(this.app, error), 500))
         }
       })
   }
@@ -70,7 +79,7 @@ export class TapestryController extends Controller {
         res.status(404).json(error)
       }
       else {
-        res.status(500).send(res.boom.wrap(manageErrors(this.app, error), 500))
+        res.status(500).send(res.boom.boomify(manageErrors(this.app, error), 500))
       }
     })
 
@@ -105,7 +114,7 @@ export class TapestryController extends Controller {
         res.status(404).json(error)
       }
       else {
-        res.status(500).send(res.boom.wrap(manageErrors(this.app, error), 500))
+        res.status(500).send(res.boom.boomify(manageErrors(this.app, error), 500))
       }
     })
 
@@ -136,7 +145,7 @@ export class TapestryController extends Controller {
         res.status(404).json(error)
       }
       else {
-        res.status(500).send(res.boom.wrap(manageErrors(this.app, error), 500))
+        res.status(500).send(res.boom.boomify(manageErrors(this.app, error), 500))
       }
     })
   }
@@ -156,7 +165,7 @@ export class TapestryController extends Controller {
           res.status(404).json(error)
         }
         else {
-          res.status(500).send(res.boom.wrap(manageErrors(this.app, error), 500))
+          res.status(500).send(res.boom.boomify(manageErrors(this.app, error), 500))
         }
       })
 
@@ -194,7 +203,7 @@ export class TapestryController extends Controller {
         res.status(404).json(error)
       }
       else {
-        res.status(500).send(res.boom.wrap(manageErrors(this.app, error), 500))
+        res.status(500).send(res.boom.boomify(manageErrors(this.app, error), 500))
       }
     })
   }
@@ -230,7 +239,7 @@ export class TapestryController extends Controller {
         res.status(404).json(error)
       }
       else {
-        res.status(500).send(res.boom.wrap(manageErrors(this.app, error), 500))
+        res.status(500).send(res.boom.boomify(manageErrors(this.app, error), 500))
       }
     })
   }
@@ -265,7 +274,7 @@ export class TapestryController extends Controller {
         res.status(404).json(error)
       }
       else {
-        res.status(500).send(res.boom.wrap(manageErrors(this.app, error), 500))
+        res.status(500).send(res.boom.boomify(manageErrors(this.app, error), 500))
       }
     })
   }

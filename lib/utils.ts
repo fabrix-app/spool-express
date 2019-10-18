@@ -1,12 +1,12 @@
 import { FabrixApp } from '@fabrix/fabrix'
 import { FabrixController as Controller } from '@fabrix/fabrix/dist/common/Controller'
 import { FabrixPolicy as Policy } from '@fabrix/fabrix/dist/common/Policy'
-import * as Joi from 'joi'
-import * as methods from 'methods'
-import * as _ from 'lodash'
+import  Joi from 'joi'
+import  methods from 'methods'
+import { isPlainObject } from 'lodash'
 import { Request, Response } from 'express'
 
-import * as http from 'http'
+import http from 'http'
 
 export const Utils = {
   extendsExpressRouter: (app: FabrixApp) => {
@@ -17,7 +17,7 @@ export const Utils = {
         const config = args[1]
 
         // Check if second argument is the route config object
-        if (_.isPlainObject(config)) {
+        if (isPlainObject(config)) {
           args[1] = function (req, res, next) {
             req.route.config = config
             next()
@@ -34,7 +34,10 @@ export const Utils = {
    */
   isFabrixStandard: function(obj) {
     const className = obj.constructor.name
-    if (className === Controller.name || className === Policy.name) {
+    if (
+      className === Controller.name
+      || className === Policy.name
+    ) {
       return true
     }
     else if (className === 'Object') {
@@ -113,6 +116,7 @@ export const Utils = {
   createJoiValidationRules: function(route) {
 
     route.config.validate.body = route.config.validate.payload // hapi compatibility
+
     const validation = route.config.validate
     const types = ['headers', 'params', 'query', 'body']
     types.forEach((type) => {
@@ -121,10 +125,13 @@ export const Utils = {
       // null, undefined, true - anything allowed
       // false - nothing allowed
       // {...} - ... allowed
-      rule = (rule === false ? Joi.object({}).allow(null) :
-        typeof rule === 'function' ? rule :
-          !rule || rule === true ? Joi.any() :
-            Joi.compile(rule))
+      rule = (rule === false
+        ? Joi.object({}).allow(null)
+        : typeof rule === 'function'
+          ? rule
+          : !rule || rule === true
+            ? Joi.any()
+            : Joi.compile(rule))
       validation[type] = rule
     })
     return validation
