@@ -1,3 +1,4 @@
 export const router = {
-  sortOrder: 'asc'
+  sortOrder: 'asc',
+  default: '/'
 }

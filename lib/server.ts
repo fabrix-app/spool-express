@@ -4,17 +4,22 @@ import { Utils as RouterUtils } from '@fabrix/spool-router'
 import { Utils } from './utils'
 import { ValidationError } from './errors'
 
-
 import { defaults, isArray, isString, each, isPlainObject } from 'lodash'
-import * as cors from 'cors'
+import cors from 'cors'
 import { join } from 'path'
-import * as http from 'http'
-import * as https from 'https'
-import * as Joi from 'joi'
-import * as session from 'express-session'
-import * as consolidate from 'consolidate'
-import * as expressBoom from 'express-boom'
+import http from 'http'
+import https from 'https'
+import Joi from 'joi'
+import session from 'express-session'
+import consolidate from 'consolidate'
+import expressBoom from 'express-boom'
 
+// Fork processes for each CPU
+import cluster from 'cluster'
+import { cpus } from 'os'
+
+// Count the number of CPUs
+const numCPUs = cpus().length
 
 export interface Server {
   [key: string]: any
@@ -341,13 +346,17 @@ export const Server: Server = {
               })
             })
           }
+
+          // If route has cors configuration,
           if (route.config.cors) {
             methods.push(cors(route.config.cors === true ? {} : route.config.cors))
           }
 
+          // If a route has "pre" policies to run, these run before global policies
           if (route.config.pre && route.config.pre.length > 0) {
             methods = methods.concat(route.config.pre)
           }
+
         }
 
         // Push the handler
@@ -362,6 +371,7 @@ export const Server: Server = {
         // Filter out undefined
         methods = methods.filter(m => m)
 
+        // Applies the route methods
         router[parts[0]].apply(router, methods)
       }
     })
@@ -386,6 +396,7 @@ export const Server: Server = {
       return Promise.reject(err)
     }
 
+    // Initialize a server
     init(app, server)
 
     const promises = Array.from(this.nativeServers.values())
@@ -396,6 +407,11 @@ export const Server: Server = {
     return Promise.all(promises)
   },
 
+  /**
+   *
+   * @param app
+   * @param server
+   */
   createNativeServers(app, server) {
     return new Promise((resolve, reject) => {
       if (this.externalConfig) {
@@ -432,6 +448,11 @@ export const Server: Server = {
     })
   },
 
+  /**
+   * Log out when a given server binds to port
+   * @param app
+   * @param config
+   */
   listenPromise(app: FabrixApp, config: {host: string, port: number, server: any}) {
     return new Promise((resolve, reject) => {
       config.server.listen(config.port, config.host, function (err) {

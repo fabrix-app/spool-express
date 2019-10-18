@@ -1,4 +1,4 @@
-import * as joi from 'joi'
+import joi from 'joi'
 import { webConfig } from './schemas/webConfig'
 import { expressConfig } from './schemas/expressConfig'
 

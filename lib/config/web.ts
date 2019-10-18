@@ -1,13 +1,13 @@
 import { FabrixApp } from '@fabrix/fabrix'
-import * as bodyParser from 'body-parser'
-import * as cookieParser from 'cookie-parser'
-import * as methodOverride from 'method-override'
-import * as compression from 'compression'
+import bodyParser from 'body-parser'
+import cookieParser from 'cookie-parser'
+import methodOverride from 'method-override'
+import compression from 'compression'
 
 import { Express, Request, Response } from 'express'
 
-import * as http from 'http'
-import * as express from 'express'
+import http from 'http'
+import express from 'express'
 
 /**
  * Server Configuration

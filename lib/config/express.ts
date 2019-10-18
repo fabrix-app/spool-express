@@ -1,3 +1,4 @@
 export const express = {
-  helmet: {}
+  helmet: {},
+  cluster: false,
 }

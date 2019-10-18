@@ -1,7 +1,7 @@
 import { ServerSpool } from '@fabrix/fabrix/dist/common/spools/server'
-import { isArray } from 'lodash'
+import { SanityError } from '@fabrix/fabrix/dist/errors'
 import { Express } from 'express'
-import * as helmet from 'helmet'
+import helmet from 'helmet'
 
 import { Server } from './server'
 import { Validator } from './validator'
@@ -9,6 +9,7 @@ import { Validator } from './validator'
 import * as config from './config/index'
 import * as pkg from '../package.json'
 import * as api  from './api/index'
+
 
 
 /**
@@ -62,6 +63,7 @@ export class ExpressSpool extends ServerSpool {
   configure () {
     // Set a config that let's other spools know this is using express as a webserver
     this.app.config.set('web.server', 'express')
+
     // Set helmet for express if it is not explicitly disabled
     if (this.app.config.get('express.helmet') !== false) {
       this.app.config.set('web.middlewares.helmet', helmet(this.app.config.get('express.helmet')))
@@ -83,6 +85,8 @@ export class ExpressSpool extends ServerSpool {
         return Server.createNativeServers(this.app, this.server)
       })
       .then(() => {
+        // Certain spools await this event, so it must be emitted each time a server is spawned,
+        // eg. see spool-realtime
         this.app.emit(
           'webserver:http',
           Array.from(Server.nativeServers.values()).map(s => s.server)
@@ -90,6 +94,8 @@ export class ExpressSpool extends ServerSpool {
         return Server.start(this.app, this.server)
       })
       .then(() => {
+        // Certain spools await this event, so it must be emitted each time a server is spawned,
+        // eg. see spool-realtime
         this.app.emit(
           'webserver:http:ready',
           Array.from(Server.nativeServers.values()).map(s => s.server)
@@ -128,7 +134,7 @@ export class ExpressSpool extends ServerSpool {
       this.app.config.get('express.helmet') !== false
       && !this.app.config.get('web.middlewares.helmet')
     ) {
-      throw new Error('Sanity Failed: Helmet was not set on web.middlware when configured at express.helmet')
+      throw new SanityError('Sanity Failed: Helmet was not set on web.middlware when configured at express.helmet')
     }
   }
 }

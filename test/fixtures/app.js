@@ -21,6 +21,9 @@ const App = {
         dialect: 'postgres'
       }
     },
+    express: {
+      cluster: true
+    },
     models: {
       defaultStore: 'sequelize',
       migrate: 'drop'
