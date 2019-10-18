@@ -9,6 +9,7 @@ import { Validator } from './validator'
 import * as config from './config/index'
 import * as pkg from '../package.json'
 import * as api  from './api/index'
+import { ConfigError } from './errors'
 
 
 
@@ -36,15 +37,16 @@ export class ExpressSpool extends ServerSpool {
    * server spools are installed (e.g. express)
    */
   async validate () {
-    const requiredSpools = ['router', 'i18n']
+    const requiredSpools = ['router', 'i18n', 'errors']
     const spools = Object.keys(this.app.spools)
 
-    if (!spools.some(v => requiredSpools.indexOf(v) >= 0)) {
-      return Promise.reject(new Error(`spool-express requires spools: ${ requiredSpools.join(', ') }!`))
+    if (!spools.some(v => requiredSpools.indexOf(v) === -1)) {
+      return Promise.reject(new ConfigError('E_PRECONDITION_FAILED', `spool-express requires spools: ${ requiredSpools.join(', ') }!`))
     }
     if (!this.app.config.get('web.express')) {
       return Promise.reject(
-        new Error(
+        new ConfigError(
+          'E_PRECONDITION_FAILED',
           'config.web.express is absent, '
           + 'please npm install your express version (4 or 5) and uncomment the line under config.web.express'
         )
@@ -64,8 +66,11 @@ export class ExpressSpool extends ServerSpool {
     // Set a config that let's other spools know this is using express as a webserver
     this.app.config.set('web.server', 'express')
 
-    // Set helmet for express if it is not explicitly disabled
-    if (this.app.config.get('express.helmet') !== false) {
+    // Set helmet for express if it is not explicitly disabled or already defined
+    if (
+      this.app.config.get('express.helmet') !== false
+      && !this.app.config.get('web.middlewares.helmet')
+    ) {
       this.app.config.set('web.middlewares.helmet', helmet(this.app.config.get('express.helmet')))
     }
   }

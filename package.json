@@ -55,7 +55,6 @@
     "consolidate": "^0.15.0",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
-    "express-boom": "^3.0.0",
     "express-session": "^1.17.0",
     "helmet": "^3.21.1",
     "joi": "^14.3.1",
@@ -66,6 +65,7 @@
   "devDependencies": {
     "@fabrix/fabrix": "^1.6.4",
     "@fabrix/lint": "^1.0.0-alpha.3",
+    "@fabrix/spool-errors": "^1.6.1",
     "@fabrix/spool-i18n": "^1.5.1",
     "@fabrix/spool-router": "^1.6.4",
     "@fabrix/spool-sequelize": "^1.6.17",
@@ -105,6 +105,7 @@
   "peerDependencies": {
     "@fabrix/fabrix": "^1.6.4",
     "@fabrix/spool-router": "^1.6.4",
+    "@fabrix/spool-errors": "^1.6.1",
     "@fabrix/spool-i18n": "^1.6.0"
   },
   "engines": {

@@ -1,8 +1,8 @@
-
 declare namespace Express {
-  interface Boom {
+  export interface Boom {
     // Add boom's properties in here
-    wrap: any
+    // wrap: any
+    [key: string]: any
   }
 
   export interface Response {

@@ -53,6 +53,7 @@ const App = {
     },
     main: {
       spools: [
+        require('@fabrix/spool-errors').ErrorsSpool,
         require('@fabrix/spool-router').RouterSpool,
         require('@fabrix/spool-i18n').I18nSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,

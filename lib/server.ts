@@ -2,8 +2,6 @@ import { FabrixApp } from '@fabrix/fabrix'
 import { Express, Request, Response } from 'express'
 import { Utils as RouterUtils } from '@fabrix/spool-router'
 import { Utils } from './utils'
-import { ValidationError } from './errors'
-
 import { defaults, isArray, isString, each, isPlainObject } from 'lodash'
 import cors from 'cors'
 import { join } from 'path'
@@ -12,14 +10,16 @@ import https from 'https'
 import Joi from 'joi'
 import session from 'express-session'
 import consolidate from 'consolidate'
-import expressBoom from 'express-boom'
+import Boom from '@hapi/boom'
 
+
+// THIS FUNCTIONALITY IS GOING TO BE ADDED TO SPOOL-CLUSTER/Fabrix Core
 // Fork processes for each CPU
-import cluster from 'cluster'
-import { cpus } from 'os'
-
-// Count the number of CPUs
-const numCPUs = cpus().length
+// import cluster from 'cluster'
+// import { cpus } from 'os'
+//
+// // Count the number of CPUs
+// const numCPUs = cpus().length
 
 export interface Server {
   [key: string]: any
@@ -190,7 +190,12 @@ export const Server: Server = {
    * @param app fabrix app
    */
   registerMiddlewares(app: FabrixApp, server: Express) {
-    server.use(expressBoom())
+
+    // Add Boom as middleware so that errors will be consitent between both Express, Hapi, Koa, Polka, etc.
+    server.use(function(req, res, next) {
+      res.boom = Boom
+      next()
+    })
 
     if (this.cors) {
       server.use(cors(this.cors === true ? {} : this.cors))
@@ -334,7 +339,7 @@ export const Server: Server = {
               }, validation, (err, result) => {
                 if (err) {
                   // return the first error
-                  return next(new ValidationError(err))
+                  return next(new app.errors.ExpressValidationError(err))
                 }
                 else {
                   req.headers = result.headers
@@ -352,8 +357,12 @@ export const Server: Server = {
             methods.push(cors(route.config.cors === true ? {} : route.config.cors))
           }
 
-          // If a route has "pre" policies to run, these run before global policies
-          if (route.config.pre && route.config.pre.length > 0) {
+          // If a route has "pre" policies to run, these run before global policies (but maybe they shouldn't?)
+          // TODO figure out a way to configure when these run.
+          if (
+            route.config.pre
+            && route.config.pre.length > 0
+          ) {
             methods = methods.concat(route.config.pre)
           }
 

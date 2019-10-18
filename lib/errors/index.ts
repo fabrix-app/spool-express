@@ -1,7 +1,10 @@
+// import { GenericError } from '@fabrix/spool-errors/dist/errors'
 import { uniq, flatten, map } from 'lodash'
+import { GenericError } from '@fabrix/spool-errors/dist/errors'
 
 export class ValidationError extends Error {
   public error
+  public code
   public statusCode
   public validation
 
@@ -19,6 +22,7 @@ export class ValidationError extends Error {
 
     error.name = ''
     this.name = error.toString()
+    this.code = 'E_BAD_REQUEST',
     this.error = 'Bad Request'
     this.statusCode = '400'
     delete this.message // weird fix, we shouldn't do this
@@ -29,3 +33,7 @@ export class ValidationError extends Error {
     }
   }
 }
+
+
+export class ConfigError extends GenericError {}
+ConfigError.prototype.name = 'ExpressSpool Error'
