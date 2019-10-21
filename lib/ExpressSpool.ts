@@ -116,6 +116,12 @@ export class ExpressSpool extends ServerSpool {
    * Stops the Server(s)
    */
   async unload () {
+
+    this.app.emit(
+      'webserver:http:stopping',
+      Array.from(Server.nativeServers.values()).map(s => s.server)
+    )
+
     if (Server.nativeServers.size === 0) {
       return
     }
