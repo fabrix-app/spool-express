@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.7](https://github.com/fabrix-app/spool-express/compare/v1.6.6...v1.6.7) (2019-10-21)
+
 ### [1.6.6](https://github.com/fabrix-app/spool-express/compare/v1.5.0...v1.6.6) (2019-10-21)
 
 
