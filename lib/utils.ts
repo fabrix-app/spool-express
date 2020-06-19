@@ -101,12 +101,14 @@ export const Utils = {
         resolve()
       })
     }
+
     response.header = (key, value) => {
       return new Promise((resolve, reject) => {
         res.set(key, value)
         resolve()
       })
     }
+
     return response
   },
 
@@ -115,7 +117,7 @@ export const Utils = {
    */
   createJoiValidationRules: function(route) {
 
-    route.config.validate.body = route.config.validate.payload // hapi compatibility
+    route.config.validate.body = route.config.validate.body || route.config.validate.payload // hapi compatibility
 
     const validation = route.config.validate
     const types = ['headers', 'params', 'query', 'body']
