@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.9](https://github.com/fabrix-app/spool-express/compare/v1.6.8...v1.6.9) (2020-07-01)
+
+
+### Features
+
+* adds spool-joi ([2bb48ee](https://github.com/fabrix-app/spool-express/commit/2bb48eeae470b94bc3c12c11729fc169f9b16187))
+
 ### [1.6.8](https://github.com/fabrix-app/spool-express/compare/v1.6.7...v1.6.8) (2020-06-19)
 
 

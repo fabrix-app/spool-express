@@ -1,6 +1,6 @@
 {
   "name": "@fabrix/spool-express",
-  "version": "1.6.8",
+  "version": "1.6.9",
   "description": "Spool Express - Binds the routes compiled in spool-router to an Express 4 Server.",
   "homepage": "https://fabrix.app",
   "author": {
