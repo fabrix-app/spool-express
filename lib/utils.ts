@@ -1,9 +1,9 @@
 import { FabrixApp } from '@fabrix/fabrix'
 import { FabrixController as Controller } from '@fabrix/fabrix/dist/common/Controller'
 import { FabrixPolicy as Policy } from '@fabrix/fabrix/dist/common/Policy'
-import  Joi from 'joi'
+// import Joi from '@hapi/joi'
 import  methods from 'methods'
-import { isPlainObject } from 'lodash'
+import { isPlainObject, get } from 'lodash'
 import { Request, Response } from 'express'
 
 import http from 'http'
@@ -115,25 +115,46 @@ export const Utils = {
   /**
    * Returnn an hapi like validation middleware for epxress
    */
-  createJoiValidationRules: function(route) {
+  createJoiValidationRules: function(app: FabrixApp, route) {
+    const joi = app.validator
+    route.config.validate.body = route.config.validate.body // express compatibility
+      || route.config.validate.payload // hapi compatibility
 
-    route.config.validate.body = route.config.validate.body || route.config.validate.payload // hapi compatibility
-
-    const validation = route.config.validate
+    const validation = get(route, 'config.validate', null)
     const types = ['headers', 'params', 'query', 'body']
     types.forEach((type) => {
       let rule = validation[type]
 
+      const schemaCheck = function (_rule) {
+        if (_rule && _rule.isJoi) {
+          return true
+        }
+        else if (joi.isSchema && joi.isSchema(_rule)) {
+          return true
+        }
+        else {
+          return false
+        }
+          // typeof Joi.isJoi !== 'undefined' ? Joi.isJoi : Joi.isSchema
+      }
       // null, undefined, true - anything allowed
       // false - nothing allowed
       // {...} - ... allowed
       rule = (rule === false
-        ? Joi.object({}).allow(null)
-        : typeof rule === 'function'
+        // The allow a null object
+        ? joi.object({}).allow(null)
+        // If already a joi schema, use the schema
+        : schemaCheck(rule)
           ? rule
-          : !rule || rule === true
-            ? Joi.any()
-            : Joi.compile(rule))
+          // If a function, use the function
+          : typeof rule === 'function'
+            ? rule
+            // If nothing, then just allow anything as the schema
+            : !rule || rule === true
+              ? joi.any()
+              // Otherwise, compile the rule
+              : joi.compile(rule))
+
       validation[type] = rule
     })
     return validation
