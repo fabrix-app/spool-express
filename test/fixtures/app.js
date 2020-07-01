@@ -54,6 +54,7 @@ const App = {
     main: {
       spools: [
         require('@fabrix/spool-errors').ErrorsSpool,
+        require('@fabrix/spool-joi').JoiSpool,
         require('@fabrix/spool-router').RouterSpool,
         require('@fabrix/spool-i18n').I18nSpool,
         require('@fabrix/spool-tapestries').TapestriesSpool,
@@ -194,6 +195,9 @@ const App = {
               'wrongParam': Joi.number().required()
             }),
             payload: Joi.object({
+              'wrongPayload': Joi.string().email().required()
+            }),
+            body: Joi.object({
               'wrongPayload': Joi.string().email().required()
             })
           }

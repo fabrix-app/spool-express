@@ -37,11 +37,14 @@ export class ExpressSpool extends ServerSpool {
    * server spools are installed (e.g. express)
    */
   async validate () {
-    const requiredSpools = ['router', 'i18n', 'errors']
+    const requiredSpools = ['router', 'i18n', 'errors', 'joi']
     const spools = Object.keys(this.app.spools)
 
     if (!spools.some(v => requiredSpools.indexOf(v) === -1)) {
-      return Promise.reject(new ConfigError('E_PRECONDITION_FAILED', `spool-express requires spools: ${ requiredSpools.join(', ') }!`))
+      return Promise.reject(new ConfigError(
+        'E_PRECONDITION_FAILED',
+        `spool-express requires spools: ${ requiredSpools.join(', ') }!`)
+      )
     }
     if (!this.app.config.get('web.express')) {
       return Promise.reject(

@@ -7,7 +7,7 @@ import cors from 'cors'
 import { join } from 'path'
 import http from 'http'
 import https from 'https'
-import Joi from 'joi'
+import joi from '@hapi/joi'
 import session from 'express-session'
 import consolidate from 'consolidate'
 import Boom from '@hapi/boom'
@@ -286,12 +286,16 @@ export const Server: Server = {
     const router = expressRouter()
     Utils.extendsExpressRouter(router)
 
-    if (this.ssl && this.redirectToHttps) {
+    // If provided with an SSL, or has redirectToHttps enabled
+    if (
+      this.ssl
+      && this.redirectToHttps
+    ) {
       router.all('*', (req, res, next) => {
         if (req.secure) {
           return next()
         }
-        res.redirect(`https://${req.hostname}:${this.port + req.url}`)
+        res.redirect(`https://${req.hostname}${(this.port ? ':' + this.port : '') + req.url}`)
       })
     }
 
@@ -323,15 +327,18 @@ export const Server: Server = {
       }
       else {
         if (route.config) {
-          if (route.config.validate && Object.keys(route.config.validate).length > 0) {
+          if (
+            route.config.validate
+            && Object.keys(route.config.validate).length > 0
+          ) {
 
             // add validation
-            const validation = Utils.createJoiValidationRules(route)
+            const validation = Utils.createJoiValidationRules(app, route)
 
             methods = methods.concat((req, res, next) => {
               // validate request
-              // the request is sequentially validate the headers, params, query, and oby
-              Joi.validate({
+              // the request is sequentially validate the headers, params, query, and body
+              app.validate({
                 headers: req.headers,
                 params: req.params,
                 query: req.query,
