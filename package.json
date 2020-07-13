@@ -91,7 +91,7 @@
     "pre-commit": "^1.2.2",
     "pug": "^2.0.1",
     "source-map-support": "^0.5.13",
-    "standard-version": "^7.0.0",
+    "standard-version": "^8.0.1",
     "smokesignals": "^3",
     "sqlite3": "^4.0.2",
     "supertest": "^4.0.2",
