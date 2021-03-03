@@ -89,7 +89,7 @@
     "nyc": "^14.1.0",
     "pg": "^6.4.2",
     "pre-commit": "^1.2.2",
-    "pug": "^2.0.1",
+    "pug": "^3.0.1",
     "source-map-support": "^0.5.13",
     "standard-version": "^7.0.0",
     "smokesignals": "^3",
